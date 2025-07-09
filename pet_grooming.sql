@@ -1,33 +1,22 @@
 -- Pet Grooming Business Scenario
 -- T-SQL script implementing the scenario described in README.md
 
--- Remove the table if it already exists
 DROP TABLE IF EXISTS dbo.PetGrooming;
 
 -- Create table to store pet grooming customers and their pets
 CREATE TABLE dbo.PetGrooming (
     Id INT IDENTITY(1,1) PRIMARY KEY,
-    CustomerName NVARCHAR(100) NOT NULL,
-    Address NVARCHAR(255) NOT NULL,
-    AnimalType NVARCHAR(20) NOT NULL,
-    PetName NVARCHAR(50) NOT NULL,
-    PricePerGrooming DECIMAL(6,2) NOT NULL,
-    ServiceFrequency NVARCHAR(10) NOT NULL, -- weekly or biweekly
-    PickupDate DATE NOT NULL,
-    EndDate DATE NULL -- null if the customer is still active
+    CustomerName NVARCHAR(100) NOT NULL CONSTRAINT ck_PetGrooming_CustomerName_not_blank CHECK(CustomerName <> ''),
+    Address NVARCHAR(255) NOT NULL CONSTRAINT ck_PetGrooming_Address_not_blank CHECK(Address <> ''),
+    AnimalType NVARCHAR(20) NOT NULL CONSTRAINT ck_PetGrooming_AnimalType_not_blank CHECK(AnimalType <> '') CONSTRAINT ck_PetGrooming_Animal CHECK(AnimalType IN ('dog','cat','rabbit','guinea pig')),
+    PetName NVARCHAR(50) NOT NULL CONSTRAINT ck_PetGrooming_PetName_not_blank CHECK(PetName <> ''),
+    PricePerGrooming DECIMAL(6,2) NOT NULL CONSTRAINT ck_PetGrooming_Price_positive CHECK(PricePerGrooming > 0),
+    ServiceFrequency NVARCHAR(10) NOT NULL CONSTRAINT ck_PetGrooming_Frequency CHECK(ServiceFrequency IN ('weekly','biweekly')),
+    PickupDate DATE NOT NULL CONSTRAINT ck_PetGrooming_PickupDate CHECK(PickupDate >= '2019-01-01'),
+    EndDate DATE NULL CONSTRAINT ck_PetGrooming_EndDate CHECK(EndDate IS NULL OR EndDate >= PickupDate)
 );
 
--- Only allow supported animal types
-ALTER TABLE dbo.PetGrooming
-ADD CONSTRAINT CHK_PetGrooming_Animal CHECK (AnimalType IN ('dog','cat','rabbit','guinea pig'));
 
--- Only allow supported service frequencies
-ALTER TABLE dbo.PetGrooming
-ADD CONSTRAINT CHK_PetGrooming_Frequency CHECK (ServiceFrequency IN ('weekly','biweekly'));
-
--- Ensure the pickup date is not earlier than 2019
-ALTER TABLE dbo.PetGrooming
-ADD CONSTRAINT CHK_PetGrooming_PickupDate CHECK (PickupDate >= '2019-01-01');
 
 -- Insert sample data from the README
 INSERT INTO dbo.PetGrooming (CustomerName, Address, AnimalType, PetName, PricePerGrooming, ServiceFrequency, PickupDate)
