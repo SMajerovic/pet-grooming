@@ -8,14 +8,14 @@ CREATE TABLE dbo.PetGrooming (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     CustomerName NVARCHAR(100) NOT NULL CONSTRAINT ck_PetGrooming_CustomerName_not_blank CHECK(CustomerName <> ''),
     Address NVARCHAR(255) NOT NULL CONSTRAINT ck_PetGrooming_Address_not_blank CHECK(Address <> ''),
-    AnimalType NVARCHAR(20) NOT NULL CONSTRAINT ck_PetGrooming_AnimalType_not_blank CHECK(AnimalType <> '') CONSTRAINT ck_PetGrooming_Animal CHECK(AnimalType IN ('dog','cat','rabbit','guinea pig')),
+    AnimalType NVARCHAR(20) NOT NULL CONSTRAINT ck_PetGrooming_Animal CHECK(AnimalType IN ('dog','cat','rabbit','guinea pig')),
     PetName NVARCHAR(50) NOT NULL CONSTRAINT ck_PetGrooming_PetName_not_blank CHECK(PetName <> ''),
     PricePerGrooming DECIMAL(6,2) NOT NULL CONSTRAINT ck_PetGrooming_Price_positive CHECK(PricePerGrooming > 0),
     ServiceFrequency NVARCHAR(10) NOT NULL CONSTRAINT ck_PetGrooming_Frequency CHECK(ServiceFrequency IN ('weekly','biweekly')),
     PickupDate DATE NOT NULL CONSTRAINT ck_PetGrooming_PickupDate CHECK(PickupDate >= '2019-01-01'),
-    EndDate DATE NULL CONSTRAINT ck_PetGrooming_EndDate CHECK(EndDate IS NULL OR EndDate >= PickupDate)
+    EndDate DATE NULL,
+    CONSTRAINT ck_PetGrooming_EndDate CHECK(EndDate IS NULL OR EndDate >= PickupDate)
 );
-
 
 
 -- Insert sample data from the README
