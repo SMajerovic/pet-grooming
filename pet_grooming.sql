@@ -16,6 +16,8 @@ CREATE TABLE dbo.PetGrooming (
     EndDate DATE NULL CONSTRAINT ck_PetGrooming_EndDate CHECK(EndDate IS NULL OR EndDate >= PickupDate)
 );
 
+
+
 -- Insert sample data from the README
 INSERT INTO dbo.PetGrooming (CustomerName, Address, AnimalType, PetName, PricePerGrooming, ServiceFrequency, PickupDate)
 VALUES
