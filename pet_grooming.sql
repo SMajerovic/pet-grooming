@@ -1,6 +1,9 @@
 -- Pet Grooming Business Scenario
 -- T-SQL script implementing the scenario described in README.md
 
+-- Remove the table if it already exists
+DROP TABLE IF EXISTS dbo.PetGrooming;
+
 -- Create table to store pet grooming customers and their pets
 CREATE TABLE dbo.PetGrooming (
     Id INT IDENTITY(1,1) PRIMARY KEY,
@@ -21,6 +24,10 @@ ADD CONSTRAINT CHK_PetGrooming_Animal CHECK (AnimalType IN ('dog','cat','rabbit'
 -- Only allow supported service frequencies
 ALTER TABLE dbo.PetGrooming
 ADD CONSTRAINT CHK_PetGrooming_Frequency CHECK (ServiceFrequency IN ('weekly','biweekly'));
+
+-- Ensure the pickup date is not earlier than 2019
+ALTER TABLE dbo.PetGrooming
+ADD CONSTRAINT CHK_PetGrooming_PickupDate CHECK (PickupDate >= '2019-01-01');
 
 -- Insert sample data from the README
 INSERT INTO dbo.PetGrooming (CustomerName, Address, AnimalType, PetName, PricePerGrooming, ServiceFrequency, PickupDate)
