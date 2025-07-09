@@ -13,8 +13,10 @@ CREATE TABLE dbo.PetGrooming (
     PricePerGrooming DECIMAL(6,2) NOT NULL CONSTRAINT ck_PetGrooming_Price_positive CHECK(PricePerGrooming > 0),
     ServiceFrequency NVARCHAR(10) NOT NULL CONSTRAINT ck_PetGrooming_Frequency CHECK(ServiceFrequency IN ('weekly','biweekly')),
     PickupDate DATE NOT NULL CONSTRAINT ck_PetGrooming_PickupDate CHECK(PickupDate >= '2019-01-01'),
-    EndDate DATE NULL CONSTRAINT ck_PetGrooming_EndDate CHECK(EndDate IS NULL OR EndDate >= PickupDate)
+    EndDate DATE NULL,
+    CONSTRAINT ck_PetGrooming_EndDate CHECK(EndDate IS NULL OR EndDate >= PickupDate)
 );
+
 
 -- Insert sample data from the README
 INSERT INTO dbo.PetGrooming (CustomerName, Address, AnimalType, PetName, PricePerGrooming, ServiceFrequency, PickupDate)
